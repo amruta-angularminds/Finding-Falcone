@@ -12,7 +12,7 @@ function Dropdown() {
       .catch((err) => console.log(err));
   }, []);
   console.log(planet);
-  return <div>dropdown menu</div>;
+  return <div>dropdown menu code will be here</div>;
 }
 
 export default Dropdown;
