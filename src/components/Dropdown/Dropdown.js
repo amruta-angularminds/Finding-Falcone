@@ -33,9 +33,9 @@ function Dropdown() {
     });
   };
 
-  console.log(destination);
   return (
     <div>
+      <h2> FInding Falcone</h2>
       <div className="dropdown">
         <div className="destination1">
           <DropdownButton
