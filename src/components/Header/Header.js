@@ -7,7 +7,7 @@ function Header() {
     <div>
       <Navbar style={{ backgroundColor: "#E99E1D" }}>
         <Container>
-          <Navbar.Brand href="#home">Hello soldier</Navbar.Brand>
+          <Navbar.Brand href="#home">Hello kkuiouio soldier</Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>Reset</Navbar.Text>
@@ -18,7 +18,9 @@ function Header() {
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
       >
-        <h1>Finding Falcone</h1>
+        <h1>Finding Falconhfgnhgjhytuikiyukjhm nbm,jhe</h1>
+        <h5>njksjdsjlfgjl</h5>
+        <h1>kfjhhgdfgjkll';</h1>
       </div>
     </div>
   );
