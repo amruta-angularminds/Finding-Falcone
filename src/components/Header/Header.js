@@ -19,8 +19,6 @@ function Header() {
         style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
       >
         <h1>Finding Falconhfgnhgjhytuikiyukjhm nbm,jhe</h1>
-        <h5>njksjdsjlfgjl</h5>
-        <h1>kfjhhgdfgjkll';</h1>
       </div>
     </div>
   );
