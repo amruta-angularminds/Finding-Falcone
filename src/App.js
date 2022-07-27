@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Header from "./components/Header";
-import Dropdown from "./components/Dropdown";
+import Header from "./components/Header/Header";
+import Dropdown from "./components/Dropdown/Dropdown";
 
 function App() {
   return (
