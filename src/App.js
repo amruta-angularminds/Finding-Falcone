@@ -1,13 +1,13 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header/Header";
-import Dropdown from "./components/Dropdown/Dropdown";
+import DropdownComponent from "./components/Dropdown/DropdownComponent";
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Dropdown />
+      <DropdownComponent />
     </div>
   );
 }
