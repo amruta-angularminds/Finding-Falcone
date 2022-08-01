@@ -5,6 +5,10 @@
   margin-top: 10px;
 }
 
+.container-main {
+  height: 300px;
+}
+
 #dropdown-basic {
   width: 200px;
   max-width: 100%;
@@ -12,18 +16,13 @@
 .label {
   margin-left: 40px;
 }
-.vehicle-main {
-  position: relative;
-  display: flex;
-  border: 2px solid black;
-  margin-left: 100px;
-}
-.dest1 {
-  border: 2px solid red;
-  /* margin-left: 200px; */
-}
+
 .main {
   display: flex;
   justify-content: center;
   gap: 150px;
+}
+.sub-btn {
+  display: flex;
+  justify-content: center;
 }

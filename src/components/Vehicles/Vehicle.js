@@ -8,42 +8,44 @@ function Vehicle({
   selectDestination,
   setSelectDestination,
   setVehicleData,
+  originalVehicle,
+  distance,
+  calculateTime,
+  timeTaken,
 }) {
   const [qtyFlag, setQtyFlag] = useState(false);
-  // const [vehicles, setVehicles] = useState(vehicleData);
+
   const handleChange = (e) => {
-    console.log(e.target.value);
-    console.log(destination_no);
     setSelectDestination({
       ...selectDestination,
-      [destination_no]: e.target.value,
+      ["destination" + (destination_no + 1)]: e.target.value,
     });
     setQtyFlag(!qtyFlag);
+    let selected = originalVehicle.filter((each) => {
+      return each.name == e.target.value;
+    });
+    calculateTime(destination_no, selected[0].max_distance / selected[0].speed);
   };
+
   useEffect(() => {
-    console.log("in effect");
-    if (qtyFlag) {
-      vehicleData?.map((data) => {
-        return Object.keys(selectDestination).map((dest) => {
-          return selectDestination[dest] === data.name
-            ? setVehicleData((prev) =>
-                prev.map((vehicle) =>
-                  vehicle.name === selectDestination[dest]
-                    ? { ...vehicle, total_no: vehicle.total_no - 1 }
-                    : vehicle
-                )
-              )
-            : "";
-        });
+    let timeValue = 0;
+    let dataV = originalVehicle;
+    const name = Object.values(selectDestination);
+    name.forEach((vec) => {
+      dataV = dataV.map((each) => {
+        if (vec === each.name) {
+          return { ...each, total_no: each.total_no - 1 };
+        } else {
+          return { ...each };
+        }
       });
-    }
+    });
+    setVehicleData(dataV);
   }, [selectDestination]);
 
-  console.log(vehicleData);
-  console.log(selectDestination);
   return (
     <div className="vehicle">
-      <Form>
+      <Form style={{ marginTop: "20px" }}>
         {vehicleData?.map((vehicle, index) => {
           return (
             <>
@@ -55,7 +57,10 @@ function Vehicle({
                   type="radio"
                   value={vehicle.name}
                   onChange={handleChange}
-                  disabled={vehicle.total_no <= 0 && index !== destination_no}
+                  disabled={
+                    !vehicle.total_no ||
+                    distance.distance > vehicle.max_distance
+                  }
                 />
               </div>
             </>
