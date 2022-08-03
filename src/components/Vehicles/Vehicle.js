@@ -48,7 +48,7 @@ function Vehicle({
       <Form style={{ marginTop: "20px" }}>
         {vehicleData?.map((vehicle, index) => {
           return (
-            <>
+            <div key={index}>
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
                   inline
@@ -63,7 +63,7 @@ function Vehicle({
                   }
                 />
               </div>
-            </>
+            </div>
           );
         })}
       </Form>

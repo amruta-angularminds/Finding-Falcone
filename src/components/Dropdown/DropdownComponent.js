@@ -6,33 +6,36 @@ import "./Dropdown.css";
 import Vehicle from "../Vehicles/Vehicle";
 import { Button } from "react-bootstrap";
 
-function DropdownComponent() {
+function DropdownComponent({ setFinalResultObj, setTime, reset }) {
+  const baseURL = "https://findfalcone.herokuapp.com";
   const navigate = useNavigate();
   const [planet, setPlanet] = useState([]);
   const [vehicleData, setVehicleData] = useState([]);
   const [originalVehicle, setOriginalVehicle] = useState([]);
-  const [destination, setDestination] = useState({
+  const [token, setToken] = useState("");
+  const commonObj = {
     destination1: "",
     destination2: "",
     destination3: "",
     destination4: "",
-  });
-  const [selectDestination, setSelectDestination] = useState({
-    destination1: "",
-    destination2: "",
-    destination3: "",
-    destination4: "",
-  });
+  };
+  const [destination, setDestination] = useState(commonObj);
+  const [selectDestination, setSelectDestination] = useState(commonObj);
+
   const [timeTaken, setTimeTaken] = useState({
     destination1: 0,
     destination2: 0,
     destination3: 0,
     destination4: 0,
   });
+  useEffect(() => {
+    setDestination(commonObj);
+    setSelectDestination(commonObj);
+  }, [reset]);
 
   useEffect(() => {
     axios
-      .get("https://findfalcone.herokuapp.com/planets")
+      .get(`${baseURL}/planets`)
       .then((res) => {
         setPlanet(res.data);
       })
@@ -41,12 +44,26 @@ function DropdownComponent() {
 
   useEffect(() => {
     axios
-      .get("https://findfalcone.herokuapp.com/vehicles")
+      .get(`${baseURL}//vehicles`)
       .then((res) => {
         setVehicleData(res.data);
         setOriginalVehicle(res.data);
       })
       .catch((err) => console.log(err));
+
+    axios
+      .post(
+        `${baseURL}/token`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        setToken(res.data.token);
+      });
   }, []);
 
   const handleDropdown = (e, dest_name) => {
@@ -56,14 +73,30 @@ function DropdownComponent() {
         : "";
     });
   };
-  const handleSubmit = () => {
-    navigate("/final");
-  };
+
   const calculateTime = (index, t) => {
-    console.log(index, t);
     setTimeTaken({ ...timeTaken, [`destination${index + 1}`]: t });
   };
-  console.log(timeTaken);
+  const handleSubmit = () => {
+    const finalDestination = {
+      token: token,
+      planet_names: Object.values(destination),
+      vehicle_names: Object.values(selectDestination),
+    };
+    axios
+      .post(`${baseURL}/find`, finalDestination, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        setFinalResultObj(res.data);
+        setTime(Object.values(timeTaken).reduce((a, b) => a + b));
+        navigate("/final");
+      });
+  };
+
   return (
     <div>
       <div className="container-main">
@@ -71,7 +104,7 @@ function DropdownComponent() {
           {Object.keys(destination).map((dname, index) => {
             return (
               <>
-                <div>
+                <div key={index}>
                   <label className="label">Destination{index + 1}</label>
                   <Dropdown onSelect={(e) => handleDropdown(e, dname)}>
                     <Dropdown.Toggle variant="secondary" id="dropdown-basic">
@@ -114,6 +147,7 @@ function DropdownComponent() {
                         originalVehicle={originalVehicle}
                         calculateTime={calculateTime}
                         timeTaken={timeTaken}
+                        token={token}
                       />
                     </>
                   ) : (
