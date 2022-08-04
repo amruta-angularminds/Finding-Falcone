@@ -11,7 +11,7 @@ function Header({ setReset }) {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text onClick={() => setReset((prev) => !prev)}>
-              Reset
+              <h5>Reset</h5>
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>

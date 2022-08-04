@@ -10,6 +10,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import FinalResult from "./components/FinalResult";
+
 function App() {
   const [finalResultObj, setFinalResultObj] = useState();
   const [time, setTime] = useState();

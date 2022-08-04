@@ -33,39 +33,36 @@ function DropdownComponent({ setFinalResultObj, setTime, reset }) {
     setSelectDestination(commonObj);
   }, [reset]);
 
+  // Concurrent api calls to set planets,vehicles and token
   useEffect(() => {
     axios
-      .get(`${baseURL}/planets`)
-      .then((res) => {
-        setPlanet(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${baseURL}//vehicles`)
-      .then((res) => {
-        setVehicleData(res.data);
-        setOriginalVehicle(res.data);
-      })
-      .catch((err) => console.log(err));
-
-    axios
-      .post(
-        `${baseURL}/token`,
-        {},
-        {
-          headers: {
-            Accept: "application/json",
-          },
-        }
+      .all([
+        axios.get(`${baseURL}/planets`),
+        axios.get(`${baseURL}//vehicles`),
+        axios.post(
+          `${baseURL}/token`,
+          {},
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        ),
+      ])
+      .then(
+        axios.spread((planetRes, vehicleRes, tokenRes) => {
+          setPlanet(planetRes.data);
+          setVehicleData(vehicleRes.data);
+          setOriginalVehicle(vehicleRes.data);
+          setToken(tokenRes.data.token);
+        })
       )
-      .then((res) => {
-        setToken(res.data.token);
+      .catch((error) => {
+        alert(error.message);
       });
   }, []);
 
+  // sets four selected destinations
   const handleDropdown = (e, dest_name) => {
     Object.keys(destination).map((dest) => {
       return dest === dest_name
@@ -74,6 +71,7 @@ function DropdownComponent({ setFinalResultObj, setTime, reset }) {
     });
   };
 
+  // calculating time taken for reach every destination
   const calculateTime = (index, t) => {
     setTimeTaken({ ...timeTaken, [`destination${index + 1}`]: t });
   };
@@ -94,7 +92,8 @@ function DropdownComponent({ setFinalResultObj, setTime, reset }) {
         setFinalResultObj(res.data);
         setTime(Object.values(timeTaken).reduce((a, b) => a + b));
         navigate("/final");
-      });
+      })
+      .catch((error) => alert(error.message));
   };
 
   return (
@@ -138,16 +137,13 @@ function DropdownComponent({ setFinalResultObj, setTime, reset }) {
                         distance={planet.find((each) =>
                           each.name === destination[dname] ? each.distance : ""
                         )}
-                        destination={destination}
                         destination_no={index}
                         vehicleData={vehicleData}
+                        setVehicleData={setVehicleData}
                         selectDestination={selectDestination}
                         setSelectDestination={setSelectDestination}
-                        setVehicleData={setVehicleData}
                         originalVehicle={originalVehicle}
                         calculateTime={calculateTime}
-                        timeTaken={timeTaken}
-                        token={token}
                       />
                     </>
                   ) : (

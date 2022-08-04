@@ -2,33 +2,29 @@ import React, { useState, useEffect } from "react";
 import "./Vehicle.css";
 import Form from "react-bootstrap/Form";
 function Vehicle({
-  destination,
+  distance,
   destination_no,
   vehicleData,
+  setVehicleData,
   selectDestination,
   setSelectDestination,
-  setVehicleData,
   originalVehicle,
-  distance,
   calculateTime,
-  timeTaken,
 }) {
-  const [qtyFlag, setQtyFlag] = useState(false);
-
+  // handles selected vehicles
   const handleChange = (e) => {
     setSelectDestination({
       ...selectDestination,
       ["destination" + (destination_no + 1)]: e.target.value,
     });
-    setQtyFlag(!qtyFlag);
     let selected = originalVehicle.filter((each) => {
-      return each.name == e.target.value;
+      return each.name === e.target.value;
     });
     calculateTime(destination_no, selected[0].max_distance / selected[0].speed);
   };
 
+  //updates vehicle data
   useEffect(() => {
-    let timeValue = 0;
     let dataV = originalVehicle;
     const name = Object.values(selectDestination);
     name.forEach((vec) => {
